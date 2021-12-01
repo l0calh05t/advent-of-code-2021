@@ -12,24 +12,19 @@ fn read_integers(file_name: &str) -> Result<Vec<i32>> {
 	Ok(values)
 }
 
-fn count_increasing_pairs(values: &[i32]) -> i32 {
+// the clever solution to the extended task: just compare the value
+// being added to the window with the value being removed
+fn count_increasing_adjacent_windows(values: &[i32], window_size: usize) -> usize {
 	values
-		.windows(2)
-		.map(|window| (window[0] < window[1]) as i32)
-		.sum()
+		.windows(window_size + 1)
+		.filter(|window| window.first() < window.last())
+		.count()
 }
 
 fn main() -> Result<()> {
 	color_eyre::install()?;
 	let values = read_integers("input.01")?;
-	let result = count_increasing_pairs(&values);
-	println!("{}", result);
-	let windowed_values: Vec<_> = values
-		.as_slice()
-		.windows(3)
-		.map(|window| window.iter().sum::<i32>())
-		.collect();
-	let result_2 = count_increasing_pairs(&windowed_values);
-	println!("{}", result_2);
+	println!("{}", count_increasing_adjacent_windows(&values, 1));
+	println!("{}", count_increasing_adjacent_windows(&values, 3));
 	Ok(())
 }
