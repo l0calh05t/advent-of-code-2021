@@ -5,71 +5,68 @@ use std::io::{BufRead, BufReader};
 use thiserror::Error;
 
 #[derive(Error, Debug)]
-pub enum Error {
+enum Error {
 	#[error("incorrect command length")]
 	SplitError,
 	#[error("invalid direction \"{0}\"")]
 	DirectionError(String),
 }
 
-fn read_commands(file_name: &str) -> Result<()> {
-	let file = File::open(file_name)?;
-	let file = BufReader::new(file);
-	let mut position = (0, 0);
-	process_results(file.lines(), |lines| -> Result<_> {
-		let (horizontal, depth) = &mut position;
-		for line in lines {
-			let (direction, amount) = line
-				.splitn(2, ' ')
-				.collect_tuple()
-				.ok_or(Error::SplitError)?;
-			let amount = amount.parse::<i32>()?;
-			match direction {
-				"forward" => *horizontal += amount,
-				"down" => *depth += amount,
-				"up" => *depth -= amount,
-				_ => return Err(Error::DirectionError(direction.to_owned()).into()),
-			}
-		}
-		println!("{:?}", position);
-		println!("{}", position.0 * position.1);
-		Ok(())
-	})??;
-	Ok(())
+use Error::{DirectionError, SplitError};
+
+#[derive(Clone, Copy)]
+enum Command {
+	Forward(i32),
+	Down(i32),
+	Up(i32),
 }
 
-fn read_commands_2(file_name: &str) -> Result<()> {
+use Command::{Down, Forward, Up};
+
+fn read_commands(file_name: &str) -> Result<Vec<Command>> {
 	let file = File::open(file_name)?;
 	let file = BufReader::new(file);
-	let mut position = (0, 0, 0);
-	process_results(file.lines(), |lines| -> Result<_> {
-		let (aim, horizontal, depth) = &mut position;
-		for line in lines {
-			let (direction, amount) = line
-				.splitn(2, ' ')
-				.collect_tuple()
-				.ok_or(Error::SplitError)?;
-			let amount = amount.parse::<i32>()?;
-			match direction {
-				"forward" => {
-					*horizontal += amount;
-					*depth += *aim * amount;
-				}
-				"down" => *aim += amount,
-				"up" => *aim -= amount,
-				_ => return Err(Error::DirectionError(direction.to_owned()).into()),
-			}
-		}
-		println!("{:?}", position);
-		println!("{}", position.1 * position.2);
-		Ok(())
-	})??;
-	Ok(())
+	process_results(file.lines(), |lines| {
+		lines
+			.map(|line| {
+				let (direction, amount) = line.splitn(2, ' ').collect_tuple().ok_or(SplitError)?;
+				let amount = amount.parse::<i32>()?;
+				Ok(match direction {
+					"forward" => Forward(amount),
+					"down" => Down(amount),
+					"up" => Up(amount),
+					_ => return Err(DirectionError(direction.to_owned()).into()),
+				})
+			})
+			.collect()
+	})?
 }
 
 fn main() -> Result<()> {
 	color_eyre::install()?;
-	read_commands("input.02")?;
-	read_commands_2("input.02")?;
+	let commands = read_commands("input.02")?;
+	let position = commands.iter().fold([0, 0], |mut position, command| {
+		let [horizontal, depth] = &mut position;
+		match *command {
+			Forward(amount) => *horizontal += amount,
+			Down(amount) => *depth += amount,
+			Up(amount) => *depth -= amount,
+		}
+		position
+	});
+	println!("{}", position.iter().product::<i32>());
+	let position_aim = commands.iter().fold([0, 0, 0], |mut position, command| {
+		let [horizontal, depth, aim] = &mut position;
+		match *command {
+			Forward(amount) => {
+				*horizontal += amount;
+				*depth += *aim * amount;
+			}
+			Down(amount) => *aim += amount,
+			Up(amount) => *aim -= amount,
+		}
+		position
+	});
+	println!("{}", position_aim[..2].iter().product::<i32>());
 	Ok(())
 }
