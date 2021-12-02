@@ -1,5 +1,5 @@
 use color_eyre::eyre::Result;
-use itertools::{process_results, Itertools};
+use itertools::Itertools;
 use std::fs::File;
 use std::io::{BufRead, BufReader};
 use thiserror::Error;
@@ -26,20 +26,19 @@ use Command::{Down, Forward, Up};
 fn read_commands(file_name: &str) -> Result<Vec<Command>> {
 	let file = File::open(file_name)?;
 	let file = BufReader::new(file);
-	process_results(file.lines(), |lines| {
-		lines
-			.map(|line| {
-				let (direction, amount) = line.splitn(2, ' ').collect_tuple().ok_or(SplitError)?;
-				let amount = amount.parse::<i32>()?;
-				Ok(match direction {
-					"forward" => Forward(amount),
-					"down" => Down(amount),
-					"up" => Up(amount),
-					_ => return Err(DirectionError(direction.to_owned()).into()),
-				})
+	file.lines()
+		.map(|line| {
+			let line = line?;
+			let (direction, amount) = line.splitn(2, ' ').collect_tuple().ok_or(SplitError)?;
+			let amount = amount.parse::<i32>()?;
+			Ok(match direction {
+				"forward" => Forward(amount),
+				"down" => Down(amount),
+				"up" => Up(amount),
+				_ => return Err(DirectionError(direction.to_owned()).into()),
 			})
-			.collect()
-	})?
+		})
+		.collect()
 }
 
 fn main() -> Result<()> {
