@@ -30,7 +30,7 @@ fn read_commands(file_name: &str) -> Result<Vec<Command>> {
 		.map(|line| {
 			let line = line?;
 			let (direction, amount) = line.splitn(2, ' ').collect_tuple().ok_or(SplitError)?;
-			let amount = amount.parse::<i32>()?;
+			let amount = amount.parse()?;
 			Ok(match direction {
 				"forward" => Forward(amount),
 				"down" => Down(amount),
