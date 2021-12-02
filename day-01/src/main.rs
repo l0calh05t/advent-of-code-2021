@@ -1,15 +1,11 @@
 use color_eyre::eyre::Result;
-use itertools::process_results;
 use std::fs::File;
 use std::io::{BufRead, BufReader};
 
 fn read_integers(file_name: &str) -> Result<Vec<i32>> {
 	let file = File::open(file_name)?;
 	let file = BufReader::new(file);
-	let values: Vec<_> = process_results(file.lines(), |lines| {
-		process_results(lines.map(|s| s.parse::<i32>()), |values| values.collect())
-	})??;
-	Ok(values)
+	file.lines().map(|line| Ok(line?.parse()?)).collect()
 }
 
 // the clever solution to the extended task: just compare the value
