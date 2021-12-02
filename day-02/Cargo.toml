@@ -1,0 +1,9 @@
+[package]
+name = "day-02"
+version = "0.1.0"
+edition = "2021"
+
+[dependencies]
+color-eyre = "0.5"
+itertools = "0.10"
+thiserror = "1"
