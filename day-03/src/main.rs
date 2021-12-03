@@ -1,5 +1,6 @@
 use bitvec::prelude::*;
 use color_eyre::eyre::Result;
+use itertools::partition;
 use std::cmp::Ordering;
 use std::fs::File;
 use std::io::{BufRead, BufReader};
@@ -14,21 +15,22 @@ fn read_bit_patterns(file_name: &str) -> Result<Vec<u16>> {
 		.collect()
 }
 
-fn determine_rating(mut bit_patterns: Vec<u16>, predicate: impl Fn(Ordering) -> bool) -> u16 {
+fn determine_rating(bit_patterns: &mut [u16], predicate: impl Fn(Ordering) -> bool) -> u16 {
+	let bit_patterns_ref = bit_patterns;
+	let mut partition_point = bit_patterns_ref.len();
 	for position in (0..VALID_BITS).rev() {
+		let bit_patterns = &mut bit_patterns_ref[..partition_point];
 		let count: usize = bit_patterns
 			.iter()
 			.map(|&bit_pattern| ((bit_pattern >> position) & 1) as usize)
 			.sum();
 		let complement = bit_patterns.len() - count;
 		let mask = (predicate(count.cmp(&complement)) as u16) << position;
-		bit_patterns = bit_patterns
-			.iter()
-			.copied()
-			.filter(|&bit_pattern| (((bit_pattern ^ mask) >> position) & 1) == 0)
-			.collect();
-		if bit_patterns.len() == 1 {
-			return bit_patterns[0];
+		partition_point = partition(bit_patterns, |&bit_pattern| {
+			(((bit_pattern ^ mask) >> position) & 1) == 0
+		});
+		if partition_point == 1 {
+			return bit_patterns_ref[0];
 		}
 	}
 	unreachable!();
@@ -61,8 +63,9 @@ fn main() -> Result<()> {
 	let gamma = gamma.into_inner() & valid_bit_mask;
 	let epsilon = !gamma & valid_bit_mask;
 	println!("{}", gamma as u32 * epsilon as u32);
-	let oxygen_generator_rating = determine_rating(bit_patterns.clone(), Ordering::is_ge);
-	let co2_scrubber_rating = determine_rating(bit_patterns, Ordering::is_lt);
+	let mut bit_patterns = bit_patterns;
+	let oxygen_generator_rating = determine_rating(&mut bit_patterns, Ordering::is_ge);
+	let co2_scrubber_rating = determine_rating(&mut bit_patterns, Ordering::is_lt);
 	println!(
 		"{}",
 		oxygen_generator_rating as u32 * co2_scrubber_rating as u32
