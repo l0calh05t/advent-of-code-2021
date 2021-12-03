@@ -1,0 +1,9 @@
+[package]
+name = "day-03"
+version = "0.1.0"
+edition = "2021"
+
+[dependencies]
+array-init = "2"
+bitvec = "0.22"
+color-eyre = "0.5"
