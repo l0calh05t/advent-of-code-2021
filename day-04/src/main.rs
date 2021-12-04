@@ -25,15 +25,18 @@ fn read_bingo_calls(lines: &mut Lines<BufReader<File>>) -> Result<Vec<u8>> {
 }
 
 #[derive(Clone, Copy, Debug)]
-struct BingoBoard([[u8; 5]; 5], [[bool; 5]; 5]);
+struct BingoBoard {
+	numbers: [[u8; 5]; 5],
+	markers: [[bool; 5]; 5],
+}
 
 impl BingoBoard {
 	fn mark(&mut self, call: u8) -> bool {
-		let BingoBoard(values, markers) = self;
-		let flat_values = values.iter().map(|line| line.iter()).flatten();
+		let BingoBoard { numbers, markers } = self;
+		let flat_numbers = numbers.iter().map(|line| line.iter()).flatten();
 		let flat_markers = markers.iter_mut().map(|line| line.iter_mut()).flatten();
-		for (value, marker) in flat_values.zip(flat_markers) {
-			if *value == call {
+		for (number, marker) in flat_numbers.zip(flat_markers) {
+			if *number == call {
 				*marker = true;
 				return true;
 			}
@@ -43,18 +46,17 @@ impl BingoBoard {
 
 	fn wins(&self) -> bool {
 		// check rows
-		self.1.iter().any(|row| row.iter().all(|x| *x)) ||
+		self.markers.iter().any(|row| row.iter().all(|x| *x)) ||
 		// check columns
-		(0..5).any(|col| self.1.iter().all(|row| row[col]))
+		(0..5).any(|col| self.markers.iter().all(|row| row[col]))
 	}
 
 	fn score(&self, call: u8) -> u32 {
-		let BingoBoard(values, markers) = self;
-		let flat_values = values.iter().map(|line| line.iter()).flatten();
-		let flat_markers = markers.iter().map(|line| line.iter()).flatten();
-		let unmarked_sum: u32 = flat_values
+		let flat_numbers = self.numbers.iter().map(|line| line.iter()).flatten();
+		let flat_markers = self.markers.iter().map(|line| line.iter()).flatten();
+		let unmarked_sum: u32 = flat_numbers
 			.zip(flat_markers)
-			.map(|(&value, &marker)| value as u32 * !marker as u32)
+			.map(|(&number, &marker)| number as u32 * !marker as u32)
 			.sum();
 		unmarked_sum * call as u32
 	}
@@ -76,7 +78,10 @@ fn read_bingo_board(lines: &mut Lines<BufReader<File>>) -> Result<Option<BingoBo
 		)
 	}))
 	.ok_or(IncorrectLength)?;
-	Ok(Some(BingoBoard(board, <_>::default())))
+	Ok(Some(BingoBoard {
+		numbers: board,
+		markers: <_>::default(),
+	}))
 }
 
 struct BingoInput(Vec<u8>, Vec<BingoBoard>);
