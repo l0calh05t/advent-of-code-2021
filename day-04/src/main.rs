@@ -43,9 +43,7 @@ impl BingoBoard {
 
 	fn wins(&self) -> bool {
 		// check rows
-		if self.1.iter().any(|row| row.iter().all(|x| *x)) {
-			return true;
-		}
+		self.1.iter().any(|row| row.iter().all(|x| *x)) ||
 		// check columns
 		(0..5).any(|col| self.1.iter().all(|row| row[col]))
 	}
