@@ -41,7 +41,7 @@ fn main() -> Result<()> {
 	let bit_patterns = read_bit_patterns("input.03")?;
 	let counts = bit_patterns
 		.iter()
-		.map(|bit_pattern| -> [usize; 16] {
+		.map(|bit_pattern| -> [usize; VALID_BITS] {
 			array_init::from_iter(
 				bit_pattern
 					.view_bits::<Lsb0>()
@@ -50,7 +50,7 @@ fn main() -> Result<()> {
 			)
 			.unwrap()
 		})
-		.fold([0usize; 16], |a, b| {
+		.fold([0usize; VALID_BITS], |a, b| {
 			array_init::from_iter(a.iter().zip(b.iter()).map(|(a, b)| a + b)).unwrap()
 		});
 	let mut gamma: BitArray<Lsb0, u16> = BitArray::zeroed();
