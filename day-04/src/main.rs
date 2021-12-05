@@ -70,7 +70,7 @@ fn read_bingo_board(lines: &mut Lines<BufReader<File>>) -> Result<Option<BingoBo
 	if !padding_line.is_empty() {
 		return Err(NonEmptyPadding.into());
 	}
-	let board = array_init::from_iter(lines.take(5).filter_map(|line| -> Option<[u8; 5]> {
+	let numbers = array_init::from_iter(lines.take(5).filter_map(|line| -> Option<[u8; 5]> {
 		let line = line.ok()?;
 		array_init::from_iter(
 			line.split_whitespace()
@@ -79,7 +79,7 @@ fn read_bingo_board(lines: &mut Lines<BufReader<File>>) -> Result<Option<BingoBo
 	}))
 	.ok_or(IncorrectLength)?;
 	Ok(Some(BingoBoard {
-		numbers: board,
+		numbers,
 		markers: <_>::default(),
 	}))
 }
