@@ -75,13 +75,14 @@ fn main() -> Result<()> {
 				if start.0 < stop.0 { 1 } else { -1 },
 				if start.1 < stop.1 { 1 } else { -1 },
 			);
-			map[[cur.0 as _, cur.1 as _]] += 1;
-			while {
+			loop {
+				map[[cur.0 as _, cur.1 as _]] += 1;
+				if cur.0 == stop.0 as _ {
+					break;
+				}
 				cur.0 += step.0;
 				cur.1 += step.1;
-				map[[cur.0 as _, cur.1 as _]] += 1;
-				cur.0 != stop.0 as _
-			} {}
+			}
 		}
 	}
 	// println!("{}", map.t());
