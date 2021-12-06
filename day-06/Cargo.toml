@@ -7,3 +7,7 @@ edition = "2021"
 
 [dependencies]
 color-eyre = "0.5"
+# intel-mkl-tool breaks with current anyhow. force exact version (https://github.com/dtolnay/anyhow/issues/207)
+anyhow = "=1.0.48"
+ndarray = "0.15"
+ndarray-linalg = { version = "0.14", features = ["intel-mkl-static"] }
