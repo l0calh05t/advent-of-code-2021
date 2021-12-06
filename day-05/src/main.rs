@@ -45,7 +45,7 @@ fn read_lines(file_name: &str) -> Result<Vec<Line>> {
 
 fn main() -> Result<()> {
 	color_eyre::install()?;
-	let lines = read_lines("input.05")?;
+	let lines = read_lines("day-05/input")?;
 	let mut shape = (0, 0);
 	for line in &lines {
 		shape.0 = shape.0.max(line.start.0).max(line.stop.0);

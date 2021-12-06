@@ -38,7 +38,7 @@ fn determine_rating(bit_patterns: &mut [u16], predicate: impl Fn(Ordering) -> bo
 
 fn main() -> Result<()> {
 	color_eyre::install()?;
-	let bit_patterns = read_bit_patterns("input.03")?;
+	let bit_patterns = read_bit_patterns("day-03/input")?;
 	let counts = bit_patterns
 		.iter()
 		.map(|bit_pattern| -> [usize; VALID_BITS] {

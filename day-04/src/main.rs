@@ -100,7 +100,7 @@ fn read_bingo_input(file_name: &str) -> Result<BingoInput> {
 
 fn main() -> Result<()> {
 	color_eyre::install()?;
-	let BingoInput(calls, mut bingo_boards) = read_bingo_input("input.04")?;
+	let BingoInput(calls, mut bingo_boards) = read_bingo_input("day-04/input")?;
 	for call in calls {
 		println!("{}", call);
 		for board in &mut bingo_boards {

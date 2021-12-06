@@ -19,7 +19,7 @@ fn count_increasing_adjacent_windows(values: &[i32], window_size: usize) -> usiz
 
 fn main() -> Result<()> {
 	color_eyre::install()?;
-	let values = read_integers("input.01")?;
+	let values = read_integers("day-01/input")?;
 	println!("{}", count_increasing_adjacent_windows(&values, 1));
 	println!("{}", count_increasing_adjacent_windows(&values, 3));
 	Ok(())

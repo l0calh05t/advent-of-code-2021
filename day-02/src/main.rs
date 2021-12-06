@@ -43,7 +43,7 @@ fn read_commands(file_name: &str) -> Result<Vec<Command>> {
 
 fn main() -> Result<()> {
 	color_eyre::install()?;
-	let commands = read_commands("input.02")?;
+	let commands = read_commands("day-02/input")?;
 	let position = commands.iter().fold([0, 0], |mut position, command| {
 		let [horizontal, depth] = &mut position;
 		match *command {
