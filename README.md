@@ -49,5 +49,5 @@ Quite the opposite, since *n* = 256 isn't exactly a large number.
 ## Day 7
 
 The simple solution of just iterating over [min, max] works just fine, but like Day 1, there is a neater solution, albeit for part one this time.
-Part one is essentially asking to minimize the *L*₁ norm deviation, which can be done by just computing the median! (In *n*-D space this generalizes to the [geometric median](https://en.wikipedia.org/wiki/Geometric_median))
-For part two, I just went with the direct solution, although I did optimize fuel cost function by applying the knowledge that the described numbers are simply the [triangular numbers](https://en.wikipedia.org/wiki/Triangular_number) which can be computed as *k*(*k* + 1)/2 (and actually happen to have been a topic in [my dissertation](https://tuprints.ulb.tu-darmstadt.de/11291/), albeit their $n$-D generalization).
+Part one is essentially asking to minimize the *L*₁ norm deviation, which can be done by just computing the median (in *n*-D space this generalizes to the [geometric median](https://en.wikipedia.org/wiki/Geometric_median))!
+For part two, I just went with the direct solution, although I did optimize fuel cost function by applying the knowledge that the described numbers are simply the [triangular numbers](https://en.wikipedia.org/wiki/Triangular_number) which can be computed as *k*(*k* + 1)/2 (and actually happen to have been a topic in [my dissertation](https://tuprints.ulb.tu-darmstadt.de/11291/), albeit their *n*-D generalization).
