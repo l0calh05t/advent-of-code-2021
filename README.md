@@ -59,3 +59,9 @@ The only interesting thing I did was to use `include_str!` to embed the input th
 Currently, not cleaned up at all.
 Plenty of magic `bitvec` constants (i.e., magic numbers).
 Ideas how to make this nicer are welcome.
+
+## Day 9
+
+I liked this one, because it's graphics-related, and I got to use `ndarray` more.
+Part one is similar to convolution and can be implemented via 2D windowed iteration with padding to get the borders.
+Part two is essentially a [flood fill](https://en.wikipedia.org/wiki/Flood_fill) with a custom filling condition.
