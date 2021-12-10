@@ -79,3 +79,9 @@ For part two, I tried (and failed) to use `chumsky`'s error recovery mechanisms,
 In the end, I just used the `expected` part of the error and appended the closing option to a mutable string buffer until everything parsed just fine.
 Almost certainly not the most efficient solution, but easily fast enough (far below a second to parse every line *at least* three times).
 I was generally pretty impressed with `chumsky`'s speed.
+
+### Addendum
+
+Added some basic timing code.
+Part one takes roughly 5 ms and part two 54 ms.
+And that's for the O(*n*²) in recovery length approach I used!

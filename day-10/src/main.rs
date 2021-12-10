@@ -1,4 +1,5 @@
 use chumsky::prelude::*;
+use std::time::Instant;
 
 static INPUT: &str = include_str!("../input");
 
@@ -36,6 +37,8 @@ fn parser() -> impl Parser<char, (), Error = Simple<char>> {
 // }
 
 fn main() {
+	let start = Instant::now();
+
 	let syntax_error_score = INPUT
 		.lines()
 		.map(|line| {
@@ -60,6 +63,8 @@ fn main() {
 		})
 		.sum::<usize>();
 	println!("{}", syntax_error_score);
+
+	let mid = Instant::now();
 
 	let mut recovery_scores = Vec::new();
 	let mut line_recovered = String::new();
@@ -106,4 +111,8 @@ fn main() {
 	recovery_scores.sort_unstable();
 	let median_recovery_score = recovery_scores[recovery_scores.len() / 2];
 	println!("{}", median_recovery_score);
+
+	let end = Instant::now();
+	println!("{} ms", (mid - start).as_millis());
+	println!("{} ms", (end - mid).as_millis());
 }
