@@ -8,6 +8,8 @@ So far these include:
 - [`array-init`](https://github.com/Manishearth/array-init)
 - [`bitvec`](https://github.com/bitvecto-rs/bitvec)
 - [`ndarray-linalg`](https://github.com/rust-ndarray/ndarray-linalg/)
+- [`ndarray-stats`](https://github.com/rust-ndarray/ndarray-stats)
+- [`chumsky`](https://github.com/zesterer/chumsky/)
 
 ## Day 1
 
@@ -65,3 +67,15 @@ Ideas how to make this nicer are welcome.
 I liked this one, because it's graphics-related, and I got to use `ndarray` more.
 Part one is similar to convolution and can be implemented via 2D windowed iteration with padding to get the borders.
 Part two is essentially a [flood fill](https://en.wikipedia.org/wiki/Flood_fill) with a custom filling condition.
+
+## Day 10
+
+Oooh… a parsing task!
+Finally, a reason to try some of those parser combinator crates I've been eying 👀!
+But [which](https://lib.rs/crates/chumsky) [to](https://lib.rs/crates/pom) [choose](https://lib.rs/crates/nom)?
+I decided to try `chumsky` for this one, and was pretty happy with the result for part one, except for the fact that `chumsky`'s error type doesn't appear to implement `std::error::Error` (so no `color-eyre` this time).
+Had the parser set up in a matter of minutes, and the error output already included all I needed.
+For part two, I tried (and failed) to use `chumsky`'s error recovery mechanisms, but maybe I just used it incorrectly.
+In the end, I just used the `expected` part of the error and appended the closing option to a mutable string buffer until everything parsed just fine.
+Almost certainly not the most efficient solution, but easily fast enough (far below a second to parse every line *at least* three times).
+I was generally pretty impressed with `chumsky`'s speed.
