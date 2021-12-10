@@ -65,7 +65,7 @@ Ideas how to make this nicer are welcome.
 ## Day 9
 
 I liked this one, because it's graphics-related, and I got to use `ndarray` more.
-Part one is similar to convolution and can be implemented via 2D windowed iteration with padding to get the borders.
+Part one is similar to [convolution](https://en.wikipedia.org/wiki/Convolution) and can be implemented via 2D windowed iteration with padding to get the borders.
 Part two is essentially a [flood fill](https://en.wikipedia.org/wiki/Flood_fill) with a custom filling condition.
 
 ## Day 10
