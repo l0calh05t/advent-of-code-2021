@@ -77,7 +77,7 @@ I decided to try `chumsky` for this one, and was pretty happy with the result fo
 Had the parser set up in a matter of minutes, and the error output already included all I needed.
 For part two, I tried (and failed) to use `chumsky`'s error recovery mechanisms, but maybe I just used it incorrectly.
 In the end, I just used the `expected` part of the error and appended the closing option to a mutable string buffer until everything parsed just fine.
-Almost certainly not the most efficient solution, but easily fast enough (far below a second to parse every line *at least* three times).
+~~Almost~~ certainly not the most efficient solution, but easily fast enough (far below a second to parse every line *at least* three times).
 I was generally pretty impressed with `chumsky`'s speed.
 
 ### Addendum
