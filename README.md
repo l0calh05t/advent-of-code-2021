@@ -85,6 +85,8 @@ I was generally pretty impressed with `chumsky`'s speed.
 Added some basic timing code.
 Part one takes roughly 5 ms and part two 54 ms.
 And that's for the O(*n*²) in recovery length approach I used!
+Because I can, I also added an `u8`-based direct parser with an explicit stack which completes both tasks in 65 **μs** (270–300 μs when printing is included).
+ASCII go brrrrr.
 
 ## Day 11
 
