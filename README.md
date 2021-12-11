@@ -85,3 +85,7 @@ I was generally pretty impressed with `chumsky`'s speed.
 Added some basic timing code.
 Part one takes roughly 5 ms and part two 54 ms.
 And that's for the O(*n*²) in recovery length approach I used!
+
+## Day 11
+
+This one was pretty straightforward.
