@@ -1,23 +1,11 @@
 use color_eyre::Result;
+use common::read_comma_separated;
 use ndarray::prelude::*;
 use ndarray_linalg::{types::c64, AsDiagonal, Eig, Inverse, LinearOperator};
-use std::{
-	fs::File,
-	io::{BufRead, BufReader},
-	str::from_utf8,
-};
-
-fn read_integers(file_name: &str) -> Result<Vec<u8>> {
-	let file = File::open(file_name)?;
-	let file = BufReader::new(file);
-	file.split(b',')
-		.map(|line| Ok(from_utf8(&line?)?.trim().parse()?))
-		.collect()
-}
 
 fn main() -> Result<()> {
 	color_eyre::install()?;
-	let timers = read_integers("day-06/input")?;
+	let timers = read_comma_separated::<u8>("day-06/input")?;
 	let mut timer_counts = [0usize; 9];
 	for timer in timers {
 		assert!((0..=6).contains(&timer));

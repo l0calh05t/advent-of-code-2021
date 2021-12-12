@@ -9,3 +9,4 @@ edition = "2021"
 color-eyre = "0.5"
 ndarray = "0.15"
 ndarray-stats = "0.5"
+common = { path = "../common" }

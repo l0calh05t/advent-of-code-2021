@@ -1,7 +1,11 @@
 use color_eyre::Result;
 use itertools::Itertools;
 use ndarray::{prelude::*, ErrorKind::IncompatibleShape, ShapeError};
-use std::{fs::File, io::Read};
+use std::{
+	fs::File,
+	io::{BufRead, BufReader, Read},
+	str::{from_utf8, FromStr},
+};
 
 pub fn read_digit_field(file_name: &str) -> Result<Array2<u8>> {
 	let mut bytes = Vec::new();
@@ -27,4 +31,16 @@ pub fn read_digit_field(file_name: &str) -> Result<Array2<u8>> {
 		.map_ok(|&b| b.checked_sub(b'0').unwrap())
 		.collect::<Result<Vec<_>>>()?;
 	Ok(Array2::from_shape_vec((lines, columns.unwrap()), values)?)
+}
+
+pub fn read_comma_separated<T>(file_name: &str) -> Result<Vec<T>>
+where
+	T: FromStr,
+	<T as std::str::FromStr>::Err: std::error::Error + Send + Sync + 'static,
+{
+	let file = File::open(file_name)?;
+	let file = BufReader::new(file);
+	file.split(b',')
+		.map(|line| Ok(from_utf8(&line?)?.trim().parse()?))
+		.collect()
 }

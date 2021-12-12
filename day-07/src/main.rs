@@ -1,19 +1,7 @@
 use color_eyre::Result;
+use common::read_comma_separated;
 use ndarray::prelude::*;
 use ndarray_stats::{interpolate::Midpoint, Quantile1dExt};
-use std::{
-	fs::File,
-	io::{BufRead, BufReader},
-	str::from_utf8,
-};
-
-fn read_integers(file_name: &str) -> Result<Vec<u16>> {
-	let file = File::open(file_name)?;
-	let file = BufReader::new(file);
-	file.split(b',')
-		.map(|line| Ok(from_utf8(&line?)?.trim().parse()?))
-		.collect()
-}
 
 fn calculate_fuel(initial: &[u16], target: u16) -> i32 {
 	initial
@@ -35,7 +23,7 @@ fn calculate_fuel_triangular(initial: &[u16], target: u16) -> i32 {
 
 fn main() -> Result<()> {
 	color_eyre::install()?;
-	let mut input = read_integers("day-07/input")?;
+	let mut input = read_comma_separated("day-07/input")?;
 
 	// for the L1 distance, the solution is simply the median
 	let median =
