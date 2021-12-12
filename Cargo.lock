@@ -165,6 +165,15 @@ dependencies = [
 ]
 
 [[package]]
+name = "common"
+version = "0.1.0"
+dependencies = [
+ "color-eyre",
+ "itertools 0.10.1",
+ "ndarray",
+]
+
+[[package]]
 name = "const-random"
 version = "0.1.13"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -307,7 +316,7 @@ name = "day-09"
 version = "0.1.0"
 dependencies = [
  "color-eyre",
- "itertools 0.10.1",
+ "common",
  "ndarray",
 ]
 
@@ -323,7 +332,7 @@ name = "day-11"
 version = "0.1.0"
 dependencies = [
  "color-eyre",
- "itertools 0.10.1",
+ "common",
  "ndarray",
 ]
 
