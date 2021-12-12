@@ -144,12 +144,13 @@ fn main() {
 	let opening = [b'(', b'[', b'{', b'<'];
 	let closing = [b')', b']', b'}', b'>'];
 	let mut error_score = 0usize;
-	let mut recovery_scores = Vec::new();
-	let mut stack = Vec::with_capacity(256);
-	'lines: for line in INPUT.as_bytes().split(|&b| b == b'\n') {
-		if line.is_empty() {
-			continue;
-		}
+	let mut recovery_scores = Vec::with_capacity(128);
+	let mut stack = Vec::with_capacity(128);
+	'lines: for line in INPUT
+		.as_bytes()
+		.split(|&b| b == b'\n')
+		.filter(|line| !line.is_empty())
+	{
 		stack.clear();
 		for c in line.iter().copied() {
 			if opening.contains(&c) {
