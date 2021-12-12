@@ -98,3 +98,6 @@ This one was pretty straightforward.
 We have reached the 50% point.
 Another pretty straightforward one.
 Since this one was based on a graph, I decided to try `petgraph`.
+One neat feature is GraphViz `.dot` output, although it doesn't work if the edges don't have weights, even if `Config::EdgeNoLabel` is specified:
+
+![<viz-js.com> rendering of the input graph](day-12/graph.svg)
