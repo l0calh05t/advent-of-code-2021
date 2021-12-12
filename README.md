@@ -10,6 +10,7 @@ So far these include:
 - [`ndarray-linalg`](https://github.com/rust-ndarray/ndarray-linalg/)
 - [`ndarray-stats`](https://github.com/rust-ndarray/ndarray-stats)
 - [`chumsky`](https://github.com/zesterer/chumsky/)
+- [`petgraph`](https://github.com/petgraph/petgraph)
 
 ## Day 1
 
@@ -91,3 +92,9 @@ ASCII go brrrrr.
 ## Day 11
 
 This one was pretty straightforward.
+
+## Day 12
+
+We have reached the 50% point.
+Another pretty straightforward one.
+Since this one was based on a graph, I decided to try `petgraph`.
