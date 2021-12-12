@@ -5,7 +5,7 @@ use std::collections::HashMap;
 
 static INPUT: &str = include_str!("../input");
 
-fn parse_graph() -> UnGraph<&'static str, ()> {
+fn parse_graph() -> UnGraph<&'static str, u32> {
 	let mut graph = UnGraph::new_undirected();
 
 	// ensure nodes aren't added twice
@@ -35,7 +35,7 @@ fn parse_graph() -> UnGraph<&'static str, ()> {
 	graph
 }
 
-fn is_small_cave(node: NodeIndex, graph: &UnGraph<&'static str, ()>) -> bool {
+fn is_small_cave(node: NodeIndex, graph: &UnGraph<&'static str, u32>) -> bool {
 	graph
 		.node_weight(node)
 		.unwrap()
@@ -47,7 +47,7 @@ fn find_paths(
 	current: NodeIndex,
 	partial: &mut Vec<NodeIndex>,
 	paths: &mut Vec<Vec<NodeIndex>>,
-	graph: &UnGraph<&'static str, ()>,
+	graph: &UnGraph<&'static str, u32>,
 ) {
 	// end reached
 	if current == 1.into() {
@@ -73,7 +73,7 @@ fn find_paths_task_two(
 	current: NodeIndex,
 	partial: &mut Vec<NodeIndex>,
 	paths: &mut Vec<Vec<NodeIndex>>,
-	graph: &UnGraph<&'static str, ()>,
+	graph: &UnGraph<&'static str, u32>,
 ) {
 	// end reached
 	if current == 1.into() {
@@ -113,4 +113,9 @@ fn main() {
 	paths.clear();
 	find_paths_task_two(0.into(), &mut Vec::new(), &mut paths, &graph);
 	println!("{}", paths.len());
+
+	println!(
+		"{}",
+		petgraph::dot::Dot::with_config(&graph, &[petgraph::dot::Config::EdgeNoLabel])
+	);
 }
