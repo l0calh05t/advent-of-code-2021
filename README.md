@@ -101,3 +101,14 @@ Since this one was based on a graph, I decided to try `petgraph`.
 One neat feature is GraphViz `.dot` output, although it doesn't work if the edges don't have weights, even if `Config::EdgeNoLabel` is specified:
 
 ![<viz-js.com> rendering of the input graph](day-12/graph.svg)
+
+## Day 13
+
+Since the input field isn't that big, this could have been done using dense arrays.
+But since most fields would be zero anyway and working with sparse representations is [kind of my thing](https://tuprints.ulb.tu-darmstadt.de/11291/), I chose to use a coordinate representation.
+
+## Day 14
+
+Finally, another one where the straightforward solution doesn't work for part two due to exponential growth!
+The solution that works is fairly similar to my initial Day 6 solution in that I only work on element pair counts, since we don't really care where element are inserted only how many.
+The first and last element need to be treated specially during counting, as they are the only ones that aren't counted twice.
