@@ -46,9 +46,9 @@ fn read_input(file_name: &str) -> Result<Instructions> {
 }
 
 fn print_info(polymer: &HashMap<(char, char), usize>, first: char, last: char) {
-	let mut base_counts = HashMap::new();
+	let mut element_counts = HashMap::new();
 	let mut set_or_add = |k: char, v: usize| {
-		match base_counts.entry(k) {
+		match element_counts.entry(k) {
 			Entry::Occupied(mut entry) => *entry.get_mut() += v,
 			Entry::Vacant(entry) => {
 				entry.insert(v);
@@ -59,15 +59,14 @@ fn print_info(polymer: &HashMap<(char, char), usize>, first: char, last: char) {
 		set_or_add(pair.0, count);
 		set_or_add(pair.1, count);
 	}
-	let base_counts = base_counts
+	let element_counts = element_counts
 		.into_iter()
-		.sorted_by_key(|(base, count)| (*count, *base))
+		.sorted_by_key(|(element, count)| (*count, *element))
 		.collect_vec();
-	let rare = base_counts.first().unwrap();
-	let common = base_counts.last().unwrap();
-	let map_count = |c: &(char, usize)| {
-		(c.1 + if c.0 == first { 1 } else { 0 } + if c.0 == last { 1 } else { 0 }) / 2
-	};
+	let rare = element_counts.first().unwrap();
+	let common = element_counts.last().unwrap();
+	let map_count =
+		|c: &(char, usize)| (c.1 + (c.0 == first) as usize + (c.0 == last) as usize) / 2;
 	let rare = map_count(rare);
 	let common = map_count(common);
 	println!("{}", common - rare);
