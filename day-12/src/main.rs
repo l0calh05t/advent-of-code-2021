@@ -10,13 +10,8 @@ fn parse_graph() -> UnGraph<&'static str, u32> {
 
 	// ensure nodes aren't added twice
 	let mut node_map: HashMap<&'static str, NodeIndex> = HashMap::new();
-	let mut get_or_insert = |name: &'static str| {
-		use std::collections::hash_map::Entry;
-		match node_map.entry(name) {
-			Entry::Occupied(entry) => *entry.get(),
-			Entry::Vacant(entry) => *entry.insert(graph.add_node(name)),
-		}
-	};
+	let mut get_or_insert =
+		|name: &'static str| *node_map.entry(name).or_insert_with(|| graph.add_node(name));
 
 	// ensure start/end always have indices 0/1
 	get_or_insert("start");

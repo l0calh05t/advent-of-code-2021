@@ -2,7 +2,7 @@ use color_eyre::Result;
 use itertools::Itertools;
 use std::{
 	borrow::BorrowMut,
-	collections::{hash_map::Entry, HashMap},
+	collections::HashMap,
 	fs::File,
 	io::{BufRead, BufReader},
 	mem::swap,
@@ -47,17 +47,9 @@ fn read_input(file_name: &str) -> Result<Instructions> {
 
 fn print_info(polymer: &HashMap<(char, char), usize>, first: char, last: char) {
 	let mut element_counts = HashMap::new();
-	let mut set_or_add = |k: char, v: usize| {
-		match element_counts.entry(k) {
-			Entry::Occupied(mut entry) => *entry.get_mut() += v,
-			Entry::Vacant(entry) => {
-				entry.insert(v);
-			}
-		};
-	};
 	for (&pair, &count) in polymer {
-		set_or_add(pair.0, count);
-		set_or_add(pair.1, count);
+		*element_counts.entry(pair.0).or_default() += count;
+		*element_counts.entry(pair.1).or_default() += count;
 	}
 	let element_counts = element_counts
 		.into_iter()
@@ -88,20 +80,12 @@ fn main() -> Result<()> {
 			print_info(&polymer, first, last);
 		}
 		new_polymer.clear();
-		let mut set_or_add = |k: (char, char), v: usize| {
-			match new_polymer.entry(k) {
-				Entry::Occupied(mut entry) => *entry.get_mut() += v,
-				Entry::Vacant(entry) => {
-					entry.insert(v);
-				}
-			};
-		};
 		for (&pair, &count) in &polymer {
 			if let Some(&insertion) = rules.get(&pair) {
-				set_or_add((pair.0, insertion), count);
-				set_or_add((insertion, pair.1), count);
+				*new_polymer.entry((pair.0, insertion)).or_default() += count;
+				*new_polymer.entry((insertion, pair.1)).or_default() += count;
 			} else {
-				set_or_add(pair, count);
+				*new_polymer.entry(pair).or_default() += count;
 			}
 		}
 		swap(&mut polymer, &mut new_polymer);
