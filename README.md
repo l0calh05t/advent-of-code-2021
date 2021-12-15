@@ -112,3 +112,12 @@ But since most fields would be zero anyway and working with sparse representatio
 Finally, another one where the straightforward solution doesn't work for part two due to exponential growth!
 The solution that works is fairly similar to my initial Day 6 solution in that I only work on element pair counts, since we don't really care where element are inserted only how many.
 The first and last element need to be treated specially during counting, as they are the only ones that aren't counted twice.
+
+## Day 15
+
+A classic shortest path problem calling for [Dijkstra's algorithm](https://en.wikipedia.org/wiki/Dijkstra%27s_algorithm) or the more efficient [A* algorithm](https://en.wikipedia.org/wiki/A*_search_algorithm).
+Since every step costs at least one, the conservative heuristic, i.e., the one that guarantees a correct result, is just the *L*₁ distance.
+Since `petgraph` already provides both algorithms, I decided to just use that.
+Instead of converting my number array into `petgraph`'s standard `Graph` data structure, I decided to implement the required traits on a newtype wrapper around `ndarray::Array2<u8>`.
+Far more work than anticipated and really made me wish for [associated `impl Trait` types](https://github.com/rust-lang/rust/issues/63063), but I can't complain about the result.
+Alternatively, I could also have used boxed iterator trait objects and hoped that the optimizer solves any performance issues, but at that point, why not just use `Graph`?
