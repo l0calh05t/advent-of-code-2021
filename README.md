@@ -128,4 +128,5 @@ Pro tip: read the specification and the documentation first.
 Why do I say this?
 Because I didn't heed my own advice and decided to try doing this with `chumsky`, since it was another parsing task.
 That approach worked fine for the value packets, but due to the context dependence in the operator packets (and [`chumsky` doesn't support nested parsers yet](https://github.com/zesterer/chumsky/issues/50)) it wasn't suitable for those packets.
-So another custom parser, so what.
+So another custom parser.
+So what?

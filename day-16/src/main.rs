@@ -91,7 +91,6 @@ fn main() {
 			]
 		})
 		.collect::<Vec<_>>();
-	// println!("{:?}", parser().parse(input.as_slice()));
 
 	let (version_sum, value, _) = parse(&input).unwrap();
 	println!("{}", version_sum);
