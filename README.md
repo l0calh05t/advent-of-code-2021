@@ -121,3 +121,11 @@ Since `petgraph` already provides both algorithms, I decided to just use that.
 Instead of converting my number array into `petgraph`'s standard `Graph` data structure, I decided to implement the required traits on a newtype wrapper around `ndarray::Array2<u8>`.
 Far more work than anticipated and really made me wish for [associated `impl Trait` types](https://github.com/rust-lang/rust/issues/63063), but I can't complain about the result.
 Alternatively, I could also have used boxed iterator trait objects and hoped that the optimizer solves any performance issues, but at that point, why not just use `Graph`?
+
+## Day 16
+
+Pro tip: read the specification and the documentation first.
+Why do I say this?
+Because I didn't heed my own advice and decided to try doing this with `chumsky`, since it was another parsing task.
+That approach worked fine for the value packets, but due to the context dependence in the operator packets (and [`chumsky` doesn't support nested parsers yet](https://github.com/zesterer/chumsky/issues/50)) it wasn't suitable for those packets.
+So another custom parser, so what.
