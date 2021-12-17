@@ -11,6 +11,7 @@ So far these include:
 - [`ndarray-stats`](https://github.com/rust-ndarray/ndarray-stats)
 - [`chumsky`](https://github.com/zesterer/chumsky/)
 - [`petgraph`](https://github.com/petgraph/petgraph)
+- [`regex`](https://github.com/rust-lang/regex)
 
 ## Day 1
 
@@ -130,3 +131,11 @@ Because I didn't heed my own advice and decided to try doing this with `chumsky`
 That approach worked fine for the value packets, but due to the context dependence in the operator packets (and [`chumsky` doesn't support nested parsers yet](https://github.com/zesterer/chumsky/issues/50)) it wasn't suitable for those packets.
 So another custom parser.
 So what?
+
+## Day 17
+
+May have to revisit this one in the future.
+There is a clear valid range for the initial *x* velocities, and I am fairly certain the same is true for the *y* velocities (although probably dependent on the initial *x* velocity), but I was too tired to figure it out.
+In any case, I finally used `regex` for this one.
+Literally the first time I ever used a regex in Rust.
+Weird.
