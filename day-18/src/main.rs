@@ -165,7 +165,7 @@ fn main() {
 	let start = Instant::now();
 	let sum = numbers
 		.clone()
-		.fold(None, |a: Option<SnailfishNumber>, b| {
+		.fold(None, |a, b| {
 			if let Some(a) = a {
 				Some(a + b)
 			} else {
