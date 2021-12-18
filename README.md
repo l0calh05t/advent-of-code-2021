@@ -139,3 +139,8 @@ There is a clear valid range for the initial *x* velocities, and I am fairly cer
 In any case, I finally used `regex` for this one.
 Literally the first time I ever used a regex in Rust.
 Weird.
+
+## Day 18
+
+More parsing, this time context-free, so I used `chumsky` again, but stuck to 0.6 instead of using the new 0.7 which made some API changes.
+Lots of recursion on this one, but nothing particularly fancy.

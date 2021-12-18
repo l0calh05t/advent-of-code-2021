@@ -397,6 +397,14 @@ dependencies = [
 ]
 
 [[package]]
+name = "day-18"
+version = "0.1.0"
+dependencies = [
+ "chumsky",
+ "itertools 0.10.1",
+]
+
+[[package]]
 name = "derive_more"
 version = "0.99.17"
 source = "registry+https://github.com/rust-lang/crates.io-index"
