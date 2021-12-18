@@ -1,6 +1,7 @@
 use chumsky::prelude::*;
 use itertools::Itertools;
 use std::fmt::Write;
+use std::time::Instant;
 
 #[derive(Debug, Clone, PartialEq, Eq)]
 enum Element {
@@ -152,9 +153,16 @@ impl std::fmt::Display for SnailfishNumber {
 }
 
 fn main() {
+	let start = Instant::now();
 	let numbers = include_str!("../input")
 		.lines()
-		.map(|line| SnailfishNumber::parse(line).unwrap());
+		.map(|line| SnailfishNumber::parse(line).unwrap())
+		.collect_vec();
+	let numbers = numbers.iter().cloned();
+	let end = Instant::now();
+	println!("{} μs", (end - start).as_micros());
+
+	let start = Instant::now();
 	let sum = numbers
 		.clone()
 		.fold(None, |a: Option<SnailfishNumber>, b| {
@@ -165,12 +173,21 @@ fn main() {
 			}
 		})
 		.unwrap();
-	println!("{}", sum.magnitude());
+	let sum_magnitude = sum.magnitude();
+	let end = Instant::now();
+	println!("{} ({} μs)", sum_magnitude, (end - start).as_micros());
+
+	let start = Instant::now();
 	let max_pairwise_magnitude = numbers
 		.clone()
 		.cartesian_product(numbers)
 		.map(|(a, b)| (a + b).magnitude())
 		.max()
 		.unwrap();
-	println!("{}", max_pairwise_magnitude);
+	let end = Instant::now();
+	println!(
+		"{} ({} μs)",
+		max_pairwise_magnitude,
+		(end - start).as_micros()
+	);
 }
