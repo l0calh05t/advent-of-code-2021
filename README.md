@@ -144,3 +144,7 @@ Weird.
 
 More parsing, this time context-free, so I used `chumsky` again, but stuck to 0.6 instead of using the new 0.7 which made some API changes.
 Lots of recursion on this one, but nothing particularly fancy.
+
+## Day 19
+
+Since there are only 24 possible orientations (3 axes for the first choice, 2 for the second, positive and negative each; the final vector is determined completely by the cross product of the first two) and the number of beacons per scanners is limited as well, I went for a brute force solution.
