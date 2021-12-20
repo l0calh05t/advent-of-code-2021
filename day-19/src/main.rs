@@ -3,8 +3,9 @@ use itertools::Itertools;
 use nalgebra::{Matrix3, Vector3};
 use regex::Regex;
 use std::{
-	collections::HashSet,
+	collections::{HashMap, HashSet},
 	mem::{swap, take},
+	time::Instant,
 };
 use thiserror::Error;
 
@@ -17,14 +18,16 @@ enum Error {
 	ScannerLength,
 	#[error("no input data")]
 	NoInput,
+	#[error("disconnected parts in input data")]
+	SeparateParts,
 }
 
-fn parse_scanners() -> Result<Vec<HashSet<Vec3>>> {
+fn parse_scanners() -> Result<Vec<Vec<Vec3>>> {
 	let input = include_str!("../input");
 	let separator = Regex::new(r"--- scanner \d+ ---")?;
 
 	let mut result = Vec::new();
-	let mut current = HashSet::new();
+	let mut current = Vec::new();
 	for line in input.lines().filter(|line| !line.is_empty()) {
 		if separator.is_match(line) {
 			if !current.is_empty() {
@@ -39,7 +42,7 @@ fn parse_scanners() -> Result<Vec<HashSet<Vec3>>> {
 			.collect_tuple()
 			.ok_or(Error::ScannerLength)?;
 		let (x, y, z) = (x?, y?, z?);
-		current.insert(Vec3::new(x, y, z));
+		current.push(Vec3::new(x, y, z));
 	}
 
 	if !current.is_empty() {
@@ -64,46 +67,66 @@ fn orientations() -> impl Iterator<Item = Mat3> {
 
 fn main() -> Result<()> {
 	color_eyre::install()?;
-	let mut scanners = parse_scanners()?;
-	let mut scanner_positions = Vec::with_capacity(scanners.len());
-	let mut matched_beacons = scanners.pop().ok_or(Error::NoInput)?;
-	let mut unmatched_scanners = Vec::with_capacity(scanners.len());
 
+	let start = Instant::now();
+
+	let mut scanners = parse_scanners()?;
+
+	let mut scanner_positions = Vec::with_capacity(scanners.len());
+	let mut beacons = HashSet::new();
+	let mut front = Vec::new();
+	let initial = scanners.pop().ok_or(Error::NoInput)?;
+	beacons.extend(initial.iter().copied());
+	front.push(initial);
 	scanner_positions.push(Vec3::new(0, 0, 0));
 
+	let mut unmatched_scanners = Vec::with_capacity(scanners.len());
+	let mut counts: HashMap<Vec3, usize> = HashMap::with_capacity(beacons.len());
 	while !scanners.is_empty() {
-		'scanner: for scanner in scanners.drain(..) {
+		let reference = front.pop().ok_or(Error::SeparateParts)?;
+
+		'scanner: for mut scanner in scanners.drain(..) {
 			for orientation in orientations() {
 				let transformed = scanner.iter().map(|v| orientation * v);
-				let counts = transformed
-					.clone()
-					.cartesian_product(matched_beacons.iter())
+				transformed
+					.cartesian_product(reference.iter())
 					.map(|(p_new, p_old)| p_new - p_old)
-					.counts();
+					.for_each(|d| {
+						*counts.entry(d).or_default() += 1;
+					});
 				let best = counts
-					.into_iter()
+					.drain()
 					.max_by_key(|(_, v)| *v)
 					.ok_or(Error::NoInput)?;
 				if best.1 < 12 {
 					continue;
 				}
-				matched_beacons.extend(transformed.map(|v| v - best.0));
-				scanner_positions.push(best.0);
+				for beacon in &mut scanner {
+					*beacon = orientation * *beacon - best.0;
+				}
+				beacons.extend(scanner.iter().copied());
+				front.push(scanner);
+				scanner_positions.push(-best.0);
 				continue 'scanner;
 			}
 			unmatched_scanners.push(scanner);
 		}
+
 		swap(&mut scanners, &mut unmatched_scanners);
 	}
 
-	println!("{}", matched_beacons.len());
 	let maximum_distance = scanner_positions
 		.iter()
 		.tuple_combinations()
 		.map(|(a, b)| (a - b).abs().sum())
 		.max()
 		.unwrap();
+
+	let stop = Instant::now();
+
+	println!("{}", beacons.len());
 	println!("{}", maximum_distance);
+	println!("{} ms", (stop - start).as_millis());
 
 	Ok(())
 }
