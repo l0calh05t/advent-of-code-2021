@@ -148,3 +148,8 @@ Lots of recursion on this one, but nothing particularly fancy.
 ## Day 19
 
 Since there are only 24 possible orientations (3 axes for the first choice, 2 for the second, positive and negative each; the final vector is determined completely by the cross product of the first two) and the number of beacons per scanners is limited as well, I went for a brute force solution.
+
+## Day 20
+
+Aside from the fact that you need to track the value of the infinite extension (it can change if the first entry of the algorithm is not zero), this is pretty straightforward.
+Just for fun and since the description stated that all pixels are affected at once, I enabled `ndarray`'s `rayon` feature, which uses the [`rayon` crate](https://github.com/rayon-rs/rayon) to parallelize operations.
