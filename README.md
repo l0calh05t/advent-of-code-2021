@@ -82,7 +82,7 @@ In the end, I just used the `expected` part of the error and appended the closin
 ~~Almost~~ certainly not the most efficient solution, but easily fast enough (far below a second to parse every line *at least* three times).
 I was generally pretty impressed with `chumsky`'s speed.
 
-### Addendum
+### Day 10 – Addendum
 
 Added some basic timing code.
 Part one takes roughly 5 ms and part two 54 ms.
@@ -144,6 +144,19 @@ Weird.
 
 More parsing, this time context-free, so I used `chumsky` again, but stuck to 0.6 instead of using the new 0.7 which made some API changes.
 Lots of recursion on this one, but nothing particularly fancy.
+
+### Day 18 – Addendum
+
+Like I did for Day 10, I added an optimized version.
+This one is completely heap allocation free aside from reading the initial inputs.
+It is also recursion free, although the magnitude computation has to “fake” recursion using an explicit 4-element stack.
+In any case it's about 10-38× faster.
+
+| Step    | Old [μs] | New [μs] | Speedup |
+|---------|---------:|---------:|--------:|
+| Parsing |      919 |       24 |   38.2× |
+| Task 1  |     1697 |       71 |   23.9× |
+| Task 2  |    35274 |     3647 |    9.7× |
 
 ## Day 19
 
