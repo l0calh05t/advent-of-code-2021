@@ -166,3 +166,10 @@ Since there are only 24 possible orientations (3 axes for the first choice, 2 fo
 
 Aside from the fact that you need to track the value of the infinite extension (it can change if the first entry of the algorithm is not zero), this is pretty straightforward.
 Just for fun and since the description stated that all pixels are affected at once, I enabled `ndarray`'s `rayon` feature, which uses the [`rayon` crate](https://github.com/rayon-rs/rayon) to parallelize operations.
+
+## Day 21
+
+Busy day today, so I skimped on parsing the input and just hardcoded the two values.
+Sorry.
+In any case, part one could have been done directly, but I made use of the fact that the three rolls modulo 10 will result in a sequence 6, 5, 4, 3, 2, 1, 0, 9, 8, 7, …
+For part two, the straightforward recursion would expand too quickly, but by folding the different numbers of ways a player can move by a certain amount into a multiplier, we can get it into sane bounds.
