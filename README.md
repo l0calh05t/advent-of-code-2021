@@ -173,3 +173,9 @@ Busy day today, so I skimped on parsing the input and just hardcoded the two val
 Sorry.
 In any case, part one could have been done directly, but I made use of the fact that the three rolls modulo 10 will result in a sequence 6, 5, 4, 3, 2, 1, 0, 9, 8, 7, …
 For part two, the straightforward recursion would expand too quickly, but by folding the different numbers of ways a player can move by a certain amount into a multiplier, we can get it into sane bounds.
+
+## Day 22
+
+That part two wouldn't be solvable using a dense array announced itself very clearly before even beginning with part one, due to the limitation to the 101³ positions in the center area, so I went straight for a range-based representation and wasn't disappointed.
+It seemed natural to represent the integer ranges as `RangeInclusive<i32>`, but in the end that wasn't terribly useful.
+My solution tests each instruction against all active cuboids, splitting those where an overlap occurs, so it's O(*n*²) and could potentially be improved by using something like an [interval tree](https://en.wikipedia.org/wiki/Interval_tree), but the instruction list just isn't long enough to warrant the effort.

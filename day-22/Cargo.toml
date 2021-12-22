@@ -1,0 +1,14 @@
+[package]
+name = "day-22"
+version = "0.1.0"
+edition = "2021"
+
+# See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
+
+[dependencies]
+array-init = "2"
+arrayvec = "0.7"
+color-eyre = "0.5"
+itertools = "0.10"
+regex = "1"
+thiserror = "1"
