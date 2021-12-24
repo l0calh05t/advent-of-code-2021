@@ -12,6 +12,7 @@ So far these include:
 - [`chumsky`](https://github.com/zesterer/chumsky/)
 - [`petgraph`](https://github.com/petgraph/petgraph)
 - [`regex`](https://github.com/rust-lang/regex)
+- [`pathfinding`](https://github.com/samueltardieu/pathfinding)
 
 ## Day 1
 
@@ -179,3 +180,12 @@ For part two, the straightforward recursion would expand too quickly, but by fol
 That part two wouldn't be solvable using a dense array announced itself very clearly before even beginning with part one, due to the limitation to the 101³ positions in the center area, so I went straight for a range-based representation and wasn't disappointed.
 It seemed natural to represent the integer ranges as `RangeInclusive<i32>`, but in the end that wasn't terribly useful.
 My solution tests each instruction against all active cuboids, splitting those where an overlap occurs, so it's O(*n*²) and could potentially be improved by using something like an [interval tree](https://en.wikipedia.org/wiki/Interval_tree), but the instruction list just isn't long enough to warrant the effort.
+
+## Day 23
+
+Another classic shortest path task.
+Only real difference to Day 15, is that now the state of the entire map is a node in the graph.
+Since `petgraph`'s `Visitable` trait has the (algorithmically unnecessary) requirement of being able to enumerate all edges and generally requires implementing a bunch of iterators, I decided to try a different crate this time.
+After a bit of searching I found `pathfinding`, which doesn't have this requirement and generally has much simpler to implement requirements, most of which can be implemented in the form of closures.
+Much more comfortable.
+While implementing part two, I was surprised to find that `Default` is still only implemented for fixed-size arrays and doesn't support `min_const_generics` yet.
