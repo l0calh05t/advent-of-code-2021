@@ -194,6 +194,6 @@ While implementing part two, I was surprised to find that `Default` is still onl
 
 This one is surprisingly complicated to solve efficiently.
 I am 99% certain there are more efficient solutions than mine, which tracks all possible machine states as well as the minimum and maximum model numbers that can lead to the corresponding state.
-At the peak, about 60M four-register states (almost 2 GB of states and model numbers), but that is certainly better than trying to evaluate all 22.9 trillion possible inputs.
+At the peak, close to 60M four-register states (almost 2 GB of states and model numbers) are tracked, but that is certainly better than trying to evaluate all 22.9 trillion possible inputs.
 To speed things up a little, I used `rayon` again.
 Directly instead of via `ndarray` this time.
