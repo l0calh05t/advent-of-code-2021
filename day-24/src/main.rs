@@ -20,14 +20,13 @@ fn main() {
 			let i = rtoi(r).unwrap();
 			new_states = states
 				.par_drain(..)
-				.flat_map_iter(|(state, (model_lo, model_hi))| {
-					(1..=9).map(move |v| {
+				.flat_map(|(state, (model_lo, model_hi))| {
+					let model_lo = 10 * model_lo;
+					let model_hi = 10 * model_hi;
+					(1..=9).par_bridge().map(move |v| {
 						let mut new_state = state;
 						new_state[i] = v;
-						(
-							new_state,
-							(10 * model_lo + v as usize, 10 * model_hi + v as usize),
-						)
+						(new_state, (model_lo + v as usize, model_hi + v as usize))
 					})
 				})
 				.collect();
@@ -35,92 +34,122 @@ fn main() {
 			let (a, b) = ab.split_whitespace().collect_tuple().unwrap();
 			let a = rtoi(a).unwrap();
 			let b = rtoi(b);
-			states
-				.par_drain(..)
-				.map(|(mut state, model)| {
-					match b {
-						Ok(b) => {
+			match b {
+				Ok(b) => {
+					states
+						.par_drain(..)
+						.map(|(mut state, model)| {
 							state[a] *= state[b];
-						}
-						Err(b) => {
+							(state, model)
+						})
+						.collect_into_vec(&mut new_states);
+				}
+				Err(b) => {
+					states
+						.par_drain(..)
+						.map(|(mut state, model)| {
 							state[a] *= b;
-						}
-					}
-					(state, model)
-				})
-				.collect_into_vec(&mut new_states);
+							(state, model)
+						})
+						.collect_into_vec(&mut new_states);
+				}
+			}
 		} else if let Some(ab) = instruction.strip_prefix("add ") {
 			let (a, b) = ab.split_whitespace().collect_tuple().unwrap();
 			let a = rtoi(a).unwrap();
 			let b = rtoi(b);
-			states
-				.par_drain(..)
-				.map(|(mut state, model)| {
-					match b {
-						Ok(b) => {
+			match b {
+				Ok(b) => {
+					states
+						.par_drain(..)
+						.map(|(mut state, model)| {
 							state[a] += state[b];
-						}
-						Err(b) => {
+							(state, model)
+						})
+						.collect_into_vec(&mut new_states);
+				}
+				Err(b) => {
+					states
+						.par_drain(..)
+						.map(|(mut state, model)| {
 							state[a] += b;
-						}
-					}
-					(state, model)
-				})
-				.collect_into_vec(&mut new_states);
+							(state, model)
+						})
+						.collect_into_vec(&mut new_states);
+				}
+			}
 		} else if let Some(ab) = instruction.strip_prefix("div ") {
 			let (a, b) = ab.split_whitespace().collect_tuple().unwrap();
 			let a = rtoi(a).unwrap();
 			let b = rtoi(b);
-			states
-				.par_drain(..)
-				.map(|(mut state, model)| {
-					match b {
-						Ok(b) => {
+			match b {
+				Ok(b) => {
+					states
+						.par_drain(..)
+						.map(|(mut state, model)| {
 							state[a] /= state[b];
-						}
-						Err(b) => {
+							(state, model)
+						})
+						.collect_into_vec(&mut new_states);
+				}
+				Err(b) => {
+					states
+						.par_drain(..)
+						.map(|(mut state, model)| {
 							state[a] /= b;
-						}
-					}
-					(state, model)
-				})
-				.collect_into_vec(&mut new_states);
+							(state, model)
+						})
+						.collect_into_vec(&mut new_states);
+				}
+			}
 		} else if let Some(ab) = instruction.strip_prefix("mod ") {
 			let (a, b) = ab.split_whitespace().collect_tuple().unwrap();
 			let a = rtoi(a).unwrap();
 			let b = rtoi(b);
-			states
-				.par_drain(..)
-				.map(|(mut state, model)| {
-					match b {
-						Ok(b) => {
+			match b {
+				Ok(b) => {
+					states
+						.par_drain(..)
+						.map(|(mut state, model)| {
 							state[a] %= state[b];
-						}
-						Err(b) => {
+							(state, model)
+						})
+						.collect_into_vec(&mut new_states);
+				}
+				Err(b) => {
+					states
+						.par_drain(..)
+						.map(|(mut state, model)| {
 							state[a] %= b;
-						}
-					}
-					(state, model)
-				})
-				.collect_into_vec(&mut new_states);
+							(state, model)
+						})
+						.collect_into_vec(&mut new_states);
+				}
+			}
 		} else if let Some(ab) = instruction.strip_prefix("eql ") {
 			let (a, b) = ab.split_whitespace().collect_tuple().unwrap();
 			let a = rtoi(a).unwrap();
 			let b = rtoi(b);
-			states
-				.par_drain(..)
-				.map(|(mut state, model)| {
-					match b {
-						Ok(b) => {
+			match b {
+				Ok(b) => {
+					states
+						.par_drain(..)
+						.map(|(mut state, model)| {
 							state[a] = (state[a] == state[b]) as _;
-						}
-						Err(b) => {
+							(state, model)
+						})
+						.collect_into_vec(&mut new_states);
+				}
+				Err(b) => {
+					states
+						.par_drain(..)
+						.map(|(mut state, model)| {
 							state[a] = (state[a] == b) as _;
-						}
-					}
-					(state, model)
-				})
-				.collect_into_vec(&mut new_states);
+							(state, model)
+						})
+						.collect_into_vec(&mut new_states);
+				}
+			}
 		} else {
 			unreachable!()
 		}
