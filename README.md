@@ -189,3 +189,11 @@ Since `petgraph`'s `Visitable` trait has the (algorithmically unnecessary) requi
 After a bit of searching I found `pathfinding`, which doesn't have this requirement and generally has much simpler to implement requirements, most of which can be implemented in the form of closures.
 Much more comfortable.
 While implementing part two, I was surprised to find that `Default` is still only implemented for fixed-size arrays and doesn't support `min_const_generics` yet.
+
+## Day 24
+
+This one is surprisingly complicated to solve efficiently.
+I am 99% certain there are more efficient solutions than mine, which tracks all possible machine states as well as the minimum and maximum model numbers that can lead to the corresponding state.
+At the peak, about 60M four-register states (almost 2 GB of states and model numbers), but that is certainly better than trying to evaluate all 22.9 trillion possible inputs.
+To speed things up a little, I used `rayon` again.
+Directly instead of via `ndarray` this time.
